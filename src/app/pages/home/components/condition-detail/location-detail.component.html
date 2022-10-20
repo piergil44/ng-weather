@@ -1,0 +1,21 @@
+<div class="well flex">
+    <div>
+        <button (click)="removeLocation()">Remove</button>
+        <h3>{{location?.name}} ({{zipCode}})</h3>
+        <h4>Current conditions: {{location?.weather[0].main}}</h4>
+        <h4>Temperatures today:</h4>
+        <p>
+            Current {{location?.main.temp | number:'.0-0'}}
+            - Max {{location?.main.temp_max | number:'.0-0'}}
+            - Min {{location?.main.temp_min | number:'.0-0'}}
+        </p>
+        <p>
+            <a [routerLink]="['/forecast', zipCode]">Show 5-day forecast for {{location?.name}}</a>
+        </p>
+    </div>
+    <div>
+        <!--      TODO: move logic -->
+        <!--      <span class="close" (click)="locationService.removeLocation(location.zip)">&times;</span>-->
+        <!--      <img [src]="weatherService.getWeatherIcon(location.weather[0].id)">-->
+    </div>
+</div>

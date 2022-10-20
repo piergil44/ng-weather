@@ -108,6 +108,7 @@
       }
     }
   },
+  "defaultProject": "ng-weather",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app",

@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
 import { LocationService } from '@core/services/location.service';
-import { WeatherService } from '@core/services/weather.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-current-conditions',
@@ -10,14 +9,10 @@ import { WeatherService } from '@core/services/weather.service';
 })
 export class CurrentConditionsComponent {
 
-  constructor(private weatherService: WeatherService, private locationService: LocationService, private router: Router) {
+  allLocations$: Observable<string[]>;
+
+  constructor(private locationService: LocationService) {
+    this.allLocations$ = this.locationService.getAllLocations();
   }
 
-  getCurrentConditions() {
-    return this.weatherService.getCurrentConditions();
-  }
-
-  showForecast(zipcode: string) {
-    this.router.navigate(['/forecast', zipcode]);
-  }
 }
