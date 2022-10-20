@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { WeatherService } from '../../../../weather.service';
-import { LocationService } from '../../../../location.service';
+import { LocationService } from '@core/services/location.service';
+import { WeatherService } from '@core/services/weather.service';
 
 @Component({
   selector: 'app-current-conditions',
