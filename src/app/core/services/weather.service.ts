@@ -16,7 +16,7 @@ export class WeatherService {
   }
 
   getLiveConditionByZipcode(zipcode: string): Observable<any> {
-    return timer(0, 5000)
+    return timer(0, 30000)
       .pipe(
         switchMap(() => this.http.get(`${ WeatherService.URL }/weather?zip=${ zipcode },us&units=imperial&APPID=${ WeatherService.APPID }`)),
         map((value: any) => ({ loading: false, value })),
