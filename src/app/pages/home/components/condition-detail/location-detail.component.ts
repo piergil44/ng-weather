@@ -3,8 +3,8 @@ import { WeatherService } from '@core/services/weather.service';
 import { Router } from '@angular/router';
 import { LocationService } from '@core/services/location.service';
 import { AutoUnsubscribe } from '@core/components/auto-unsubscribe.component';
-import { catchError, takeUntil } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-location-detail',
@@ -14,7 +14,7 @@ import { of } from 'rxjs';
 export class LocationDetailComponent extends AutoUnsubscribe implements OnInit {
   @Input() zipCode: string;
 
-  location: any;
+  location$: Observable<{ loading: boolean, value?: any, error?: any }>;
 
   constructor(private locationService: LocationService, private weatherService: WeatherService, private router: Router) {
     super();
@@ -32,21 +32,13 @@ export class LocationDetailComponent extends AutoUnsubscribe implements OnInit {
     this.locationService.removeLocation(this.zipCode);
   }
 
+  getWeatherIcon(id: number) {
+    return this.weatherService.getWeatherIcon(id);
+  }
+
   private _initPolling() {
-    this.weatherService
+    this.location$ = this.weatherService
       .getLiveConditionByZipcode(this.zipCode)
-      .pipe(
-        catchError(({ error }) => {
-          if (error.cod === '404') {
-            console.log(error.message);
-            this.locationService.removeLocation(this.zipCode);
-          }
-          return of(undefined);
-        }),
-        takeUntil(this.destroy$),
-      )
-      .subscribe(
-        data => this.location = data,
-      );
+      .pipe(takeUntil(this.destroy$));
   }
 }

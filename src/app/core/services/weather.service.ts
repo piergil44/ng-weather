@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Observable, timer } from 'rxjs';
+import { Observable, of, timer } from 'rxjs';
 
 import { HttpClient } from '@angular/common/http';
-import { share, switchMap } from 'rxjs/operators';
+import { catchError, map, share, startWith, switchMap } from 'rxjs/operators';
 
 @Injectable()
 export class WeatherService {
@@ -19,6 +19,11 @@ export class WeatherService {
     return timer(0, 5000)
       .pipe(
         switchMap(() => this.http.get(`${ WeatherService.URL }/weather?zip=${ zipcode },us&units=imperial&APPID=${ WeatherService.APPID }`)),
+        map((value: any) => ({ loading: false, value })),
+        startWith({ loading: true }),
+        catchError(({ error }) => {
+          return of({ loading: false, error });
+        }),
         share(),
       );
   }
@@ -32,22 +37,33 @@ export class WeatherService {
     return this.http.get(`${ WeatherService.URL }/forecast/daily?zip=${ zipcode },us&units=imperial&cnt=5&APPID=${ WeatherService.APPID }`);
   }
 
-  getWeatherIcon(id) {
+  getWeatherIcon(id: number) {
     if (id >= 200 && id <= 232) {
       return WeatherService.ICON_URL + 'art_storm.png';
-    } else if (id >= 501 && id <= 511) {
-      return WeatherService.ICON_URL + 'art_rain.png';
-    } else if (id === 500 || (id >= 520 && id <= 531)) {
-      return WeatherService.ICON_URL + 'art_light_rain.png';
-    } else if (id >= 600 && id <= 622) {
-      return WeatherService.ICON_URL + 'art_snow.png';
-    } else if (id >= 801 && id <= 804) {
-      return WeatherService.ICON_URL + 'art_clouds.png';
-    } else if (id === 741 || id === 761) {
-      return WeatherService.ICON_URL + 'art_fog.png';
-    } else {
-      return WeatherService.ICON_URL + 'art_clear.png';
     }
+
+    if (id >= 501 && id <= 511) {
+      return WeatherService.ICON_URL + 'art_rain.png';
+    }
+
+    if (id === 500 || (id >= 520 && id <= 531)) {
+      return WeatherService.ICON_URL + 'art_light_rain.png';
+    }
+
+    if (id >= 600 && id <= 622) {
+      return WeatherService.ICON_URL + 'art_snow.png';
+    }
+
+    if (id >= 801 && id <= 804) {
+      return WeatherService.ICON_URL + 'art_clouds.png';
+    }
+
+    if (id === 741 || id === 761) {
+      return WeatherService.ICON_URL + 'art_fog.png';
+    }
+
+    return WeatherService.ICON_URL + 'art_clear.png';
+
   }
 
 }
