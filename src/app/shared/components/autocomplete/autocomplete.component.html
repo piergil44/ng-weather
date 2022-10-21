@@ -13,7 +13,8 @@
         <li *ngFor="let item of filteredList; let index = index">
             <a (click)="onSelect(item)">
                 <ng-container *ngIf="itemTemplate; else defaultItemTemplate">
-                    <ng-template [ngTemplateOutlet]="itemTemplate"></ng-template>
+                    <ng-template [ngTemplateOutlet]="itemTemplate"
+                                 [ngTemplateOutletContext]="{$implicit: item}"></ng-template>
                 </ng-container>
                 <ng-template #defaultItemTemplate>
                     {{ item.label }}

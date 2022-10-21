@@ -8,6 +8,7 @@
             <h2>Enter Country:</h2>
             <app-autocomplete
                   [(value)]="country"
+                  [itemTemplate]="autocompleteItem"
                   [placeholder]="'Type to search!'"
                   [options]="countryService.getAllCountries()"></app-autocomplete>
         </div>
@@ -25,3 +26,6 @@
         </button>
     </app-button>
 </div>
+<ng-template #autocompleteItem let-item>
+    ({{ item.value }}) {{item.label}}
+</ng-template>
