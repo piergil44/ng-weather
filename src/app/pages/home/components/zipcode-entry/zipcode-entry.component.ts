@@ -27,6 +27,10 @@ export class ZipcodeEntryComponent {
     this._clearInput();
   }
 
+  search(query: string) {
+    return this.countryService.getCountriesByName(query);
+  }
+
   private _clearInput() {
     this.zipcode = '';
     this.country = {};

@@ -82,11 +82,13 @@ export class AutocompleteComponent extends AutoUnsubscribe implements OnInit, Af
    * @private
    */
   private _initLocalOptions() {
-    this.options
-      .pipe(take(1))
-      .subscribe((options) => {
-        this.localOptions = options;
-      });
+    if (this.options) {
+      this.options
+        .pipe(take(1))
+        .subscribe((options) => {
+          this.localOptions = options;
+        });
+    }
   }
 
   /**

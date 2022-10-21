@@ -10,7 +10,7 @@
                   [(value)]="country"
                   [itemTemplate]="autocompleteItem"
                   [placeholder]="'Type to search!'"
-                  [options]="countryService.getAllCountries()"></app-autocomplete>
+                  [searchMethod]="search.bind(this)"></app-autocomplete>
         </div>
     </div>
     <br>
