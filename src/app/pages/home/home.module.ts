@@ -5,6 +5,8 @@ import { ZipcodeEntryComponent } from './components/zipcode-entry/zipcode-entry.
 import { CurrentConditionsComponent } from './components/current-conditions/current-conditions.component';
 import { routing } from './home.routing';
 import { LocationDetailComponent } from './components/location-detail/location-detail.component';
+import { SharedModule } from '@shared/shared.module';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -16,6 +18,8 @@ import { LocationDetailComponent } from './components/location-detail/location-d
   imports: [
     CommonModule,
     routing,
+    SharedModule,
+    FormsModule,
   ],
 })
 export class HomeModule {
