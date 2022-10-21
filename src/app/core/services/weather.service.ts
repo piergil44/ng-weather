@@ -3,6 +3,8 @@ import { Observable, of, timer } from 'rxjs';
 
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, share, startWith, switchMap } from 'rxjs/operators';
+import { LocationWeather } from '@core/models/location.model';
+import { DailyForecast } from '@core/models/daily-forecast.model';
 
 @Injectable()
 export class WeatherService {
@@ -15,10 +17,10 @@ export class WeatherService {
   constructor(private http: HttpClient) {
   }
 
-  getLiveConditionByZipcode(zipcode: string): Observable<any> {
+  getLiveConditionByZipcode(zipcode: string, countryCode: string): Observable<{ loading: boolean, value?: LocationWeather, error?: Record<string, string> }> {
     return timer(0, 30000)
       .pipe(
-        switchMap(() => this.http.get(`${ WeatherService.URL }/weather?zip=${ zipcode },us&units=imperial&APPID=${ WeatherService.APPID }`)),
+        switchMap(() => this.http.get(`${ WeatherService.URL }/weather?zip=${ zipcode },${ countryCode }&units=imperial&APPID=${ WeatherService.APPID }`)),
         map((value: any) => ({ loading: false, value })),
         startWith({ loading: true }),
         catchError(({ error }) => {
@@ -28,13 +30,9 @@ export class WeatherService {
       );
   }
 
-  getCurrentConditions(): any[] {
-    return this.currentConditions;
-  }
-
-  getForecast(zipcode: string): Observable<any> {
+  getForecast(zipcode: string, countryCode: string): Observable<DailyForecast> {
     // Here we make a request to get the forecast data from the API. Note the use of backticks and an expression to insert the zipcode
-    return this.http.get(`${ WeatherService.URL }/forecast/daily?zip=${ zipcode },us&units=imperial&cnt=5&APPID=${ WeatherService.APPID }`);
+    return this.http.get<DailyForecast>(`${ WeatherService.URL }/forecast/daily?zip=${ zipcode },${ countryCode }&units=imperial&cnt=5&APPID=${ WeatherService.APPID }`);
   }
 
   getWeatherIcon(id: number) {

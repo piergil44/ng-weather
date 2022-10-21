@@ -1,0 +1,9 @@
+.dropdown-menu-open {
+    display: block;
+}
+
+.custom-dropdown {
+    width: 100%;
+    max-height: 20vh;
+    overflow-y: scroll;
+}

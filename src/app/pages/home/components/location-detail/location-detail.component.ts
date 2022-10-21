@@ -1,10 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { WeatherService } from '@core/services/weather.service';
-import { Router } from '@angular/router';
 import { LocationService } from '@core/services/location.service';
 import { AutoUnsubscribe } from '@core/components/auto-unsubscribe.component';
 import { takeUntil } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { LocationWeather } from '@core/models/location.model';
 
 @Component({
   selector: 'app-location-detail',
@@ -13,10 +13,11 @@ import { Observable } from 'rxjs';
 })
 export class LocationDetailComponent extends AutoUnsubscribe implements OnInit {
   @Input() zipCode: string;
+  @Input() countryCode: string;
 
-  location$: Observable<{ loading: boolean, value?: any, error?: any }>;
+  location$: Observable<{ loading: boolean, value?: LocationWeather, error?: Record<string, string> }>;
 
-  constructor(private locationService: LocationService, private weatherService: WeatherService, private router: Router) {
+  constructor(private locationService: LocationService, private weatherService: WeatherService) {
     super();
   }
 
@@ -24,12 +25,8 @@ export class LocationDetailComponent extends AutoUnsubscribe implements OnInit {
     this._initPolling();
   }
 
-  showForecast() {
-    this.router.navigate(['/forecast', this.zipCode]);
-  }
-
   removeLocation() {
-    this.locationService.removeLocation(this.zipCode);
+    this.locationService.removeLocation(this.zipCode, this.countryCode);
   }
 
   getWeatherIcon(id: number) {
@@ -38,7 +35,7 @@ export class LocationDetailComponent extends AutoUnsubscribe implements OnInit {
 
   private _initPolling() {
     this.location$ = this.weatherService
-      .getLiveConditionByZipcode(this.zipCode)
+      .getLiveConditionByZipcode(this.zipCode, this.countryCode)
       .pipe(takeUntil(this.destroy$));
   }
 }

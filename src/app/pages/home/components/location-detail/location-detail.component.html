@@ -10,7 +10,8 @@
                 - Min {{location.value?.main.temp_min | number:'.0-0'}}
             </p>
             <p>
-                <a [routerLink]="['/forecast', zipCode]">Show 5-day forecast for {{location.value?.name}}</a>
+                <a [routerLink]="['/forecast', countryCode, zipCode]">Show 5-day forecast
+                    for {{location.value?.name}}</a>
             </p>
         </div>
         <div>

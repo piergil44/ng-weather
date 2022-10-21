@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { LocationInfo } from '@core/models/location.model';
 
 export const LOCATIONS: string = 'locations';
 
 @Injectable()
 export class LocationService {
-  private locations$: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
+  private locations$: BehaviorSubject<LocationInfo[]> = new BehaviorSubject<LocationInfo[]>([]);
 
   constructor() {
     let locString = localStorage.getItem(LOCATIONS);
@@ -14,20 +15,20 @@ export class LocationService {
     }
   }
 
-  getAllLocations() {
+  getAllLocations(): Observable<LocationInfo[]> {
     return this.locations$.asObservable();
   }
 
-  addLocation(zipcode: string) {
+  addLocation(zipcode: string, countryCode: string) {
     const currentLocation = this.locations$.value;
-    currentLocation.push(zipcode);
+    currentLocation.push({ zipcode, countryCode });
     localStorage.setItem(LOCATIONS, JSON.stringify(currentLocation));
     this.locations$.next(currentLocation);
   }
 
-  removeLocation(zipcode: string) {
+  removeLocation(zipcode: string, countryCode: string) {
     const currentLocation = this.locations$.value;
-    let index = currentLocation.indexOf(zipcode);
+    let index = currentLocation.findIndex((location) => location.zipcode === zipcode && location.countryCode === countryCode);
     if (index !== -1) {
       currentLocation.splice(index, 1);
       localStorage.setItem(LOCATIONS, JSON.stringify(currentLocation));

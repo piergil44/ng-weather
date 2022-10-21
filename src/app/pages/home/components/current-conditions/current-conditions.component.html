@@ -1,6 +1,7 @@
 <div>
-    <ng-container *ngFor="let zipCode of allLocations$ | async">
-        <app-location-detail [zipCode]="zipCode"></app-location-detail>
+    <ng-container *ngFor="let locationInfo of allLocations$ | async">
+        <app-location-detail [zipCode]="locationInfo.zipcode"
+                             [countryCode]="locationInfo.countryCode"></app-location-detail>
     </ng-container>
 </div>
 

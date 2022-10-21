@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { LocationService } from '@core/services/location.service';
 import { Observable } from 'rxjs';
+import { LocationInfo } from '@core/models/location.model';
 
 @Component({
   selector: 'app-current-conditions',
@@ -9,7 +10,7 @@ import { Observable } from 'rxjs';
 })
 export class CurrentConditionsComponent {
 
-  allLocations$: Observable<string[]>;
+  allLocations$: Observable<LocationInfo[]>;
 
   constructor(private locationService: LocationService) {
     this.allLocations$ = this.locationService.getAllLocations();

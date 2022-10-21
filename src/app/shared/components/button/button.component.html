@@ -1,4 +1,4 @@
-<div *ngIf="status$|async as status">
+<ng-container *ngIf="status$|async as status">
     <ng-container *ngIf="status.clear">
         <ng-content select="[clear]"></ng-content>
     </ng-container>
@@ -8,4 +8,4 @@
     <ng-container *ngIf="status.finished">
         <ng-content select="[finished]"></ng-content>
     </ng-container>
-</div>
+</ng-container>

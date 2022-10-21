@@ -1,0 +1,24 @@
+<div class="dropdown">
+    <input
+      #input
+      type="text"
+      [(ngModel)]="value.label"
+      [placeholder]="placeholder"
+      class="form-control"
+      [disabled]="disabled"
+      autocomplete="off">
+
+    <ul class="dropdown-menu custom-dropdown"
+        [class.dropdown-menu-open]="isSelectBoxOpen">
+        <li *ngFor="let item of filteredList; let index = index">
+            <a (click)="onSelect(item)">
+                <ng-container *ngIf="itemTemplate; else defaultItemTemplate">
+                    <ng-template [ngTemplateOutlet]="itemTemplate"></ng-template>
+                </ng-container>
+                <ng-template #defaultItemTemplate>
+                    {{ item.label }}
+                </ng-template>
+            </a>
+        </li>
+    </ul>
+</div>
