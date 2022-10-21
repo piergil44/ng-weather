@@ -10,12 +10,13 @@
                   [(value)]="country"
                   [itemTemplate]="autocompleteItem"
                   [placeholder]="'Type to search!'"
-                  [searchMethod]="search.bind(this)"></app-autocomplete>
+                  [options]="countryService.getAllCountries()"></app-autocomplete>
         </div>
     </div>
     <br>
-    <app-button [status$]="status" (click)="addLocation()">
-        <button clear class="btn btn-primary" [disabled]="zipcode==='' || !country || country.value===''">
+    <app-button [clickHandler]="addLocation.bind(this)">
+        <button clear class="btn btn-primary"
+                [disabled]="zipcode==='' || !country || !country.value || country.value===''">
             Add location
         </button>
         <button submitting class="btn btn-primary" disabled>
@@ -26,6 +27,7 @@
         </button>
     </app-button>
 </div>
+
 <ng-template #autocompleteItem let-item>
     ({{ item.value }}) {{item.label}}
 </ng-template>

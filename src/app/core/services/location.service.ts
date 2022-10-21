@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { LocationInfo } from '@core/models/location.model';
+import { delay } from 'rxjs/operators';
 
 export const LOCATIONS: string = 'locations';
 
@@ -24,6 +25,8 @@ export class LocationService {
     currentLocation.push({ zipcode, countryCode });
     localStorage.setItem(LOCATIONS, JSON.stringify(currentLocation));
     this.locations$.next(currentLocation);
+    // Simulate is an async fn
+    return of('Location added correctly').pipe(delay(1000));
   }
 
   removeLocation(zipcode: string, countryCode: string) {

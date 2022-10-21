@@ -47,6 +47,10 @@ export class AutocompleteComponent extends AutoUnsubscribe implements OnInit, Af
     this.isSelectBoxOpen = false;
   }
 
+  /**
+   * Filter Options method. Check input and exec filter
+   * @private
+   */
   private _filterOptions() {
     this.filteredList = [];
     if (!this.value.label || this.value.label.length < this.minTermLength) {

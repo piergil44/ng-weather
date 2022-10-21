@@ -1,6 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { BehaviorSubject, concat, Observable, of } from 'rxjs';
-import { delay, switchMap } from 'rxjs/operators';
+import { Component, Input } from '@angular/core';
+import { BehaviorSubject, from, Observable } from 'rxjs';
+import { delay, take, tap } from 'rxjs/operators';
 
 export class ButtonStatus extends BehaviorSubject<{ submitting?: any, finished?: any, clear?: any }> {
   constructor(param: { submitting?: any, finished?: any, clear?: any }) {
@@ -13,21 +13,23 @@ export class ButtonStatus extends BehaviorSubject<{ submitting?: any, finished?:
   templateUrl: './button.component.html',
   styleUrls: ['./button.component.css'],
 })
-export class ButtonComponent implements OnInit {
-  @Input() status$: Observable<{ submitting?: any, finished?: any, clear?: any }>;
+export class ButtonComponent {
+  @Input() status$: BehaviorSubject<{ submitting?: any, finished?: any, clear?: any }> = new BehaviorSubject<{ submitting?: any; finished?: any; clear?: any }>({ clear: true });
+  @Input() clickHandler: (event: any) => Observable<any> | Promise<any>;
 
   constructor() {
   }
 
-  ngOnInit() {
-    this.status$ = this.status$.pipe(
-      switchMap((status: any) => {
-        if (status.finished) {
-          return concat(of(status), of({ clear: true }).pipe(delay(500)));
-        }
-        return of(status);
-      }),
-    );
+  onClick(event: any) {
+    this.status$.next({ submitting: true });
+    from(this.clickHandler(event))
+      .pipe(
+        tap(() => this.status$.next({ finished: true })),
+        delay(500),
+        tap(() => this.status$.next({ clear: true })),
+        take(1),
+      )
+      .subscribe();
   }
 
 }
